@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(SpriteAnimator))]
+[RequireComponent(typeof(Collider))]
 public class CharacterMovement : MonoBehaviour
 {
     public float accelerationMultiplier = 10f;
@@ -18,15 +19,19 @@ public class CharacterMovement : MonoBehaviour
     private Vector2 CurrentSpeed;
     private Vector2 AccelerationDirection;
     private float rotSpeed;
-    
+    private float distToGround;
+
     private Rigidbody rb;
     private SpriteAnimator spriteAnim;
+    private Collider _collider;
+
     
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         spriteAnim = GetComponent<SpriteAnimator>();
-
+        _collider = GetComponent<Collider>();
+        distToGround = _collider.bounds.extents.y;
     }
 
     public void MoveHorizontal(float input)
@@ -43,11 +48,15 @@ public class CharacterMovement : MonoBehaviour
         AccelerationDirection.y = input;
     }
 
+    public bool IsGrounded(){
+        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+    }
     public void Jump(float input)
     {
-        if (Mathf.Abs(rb.velocity.y) < 0.5)
+        if (IsGrounded())
         {
             rb.AddForce(0, jumpForce, 0);
+            spriteAnim.SetState(2);
         }
     }
 
@@ -66,13 +75,14 @@ public class CharacterMovement : MonoBehaviour
 
         if (CurrentSpeed.magnitude > 0.1)
         {
-            spriteAnim.animState = EAnimSelector.walk;
+            spriteAnim.SetState(1);
             
         }
         else
         {
-            spriteAnim.animState = EAnimSelector.Idle;
+            spriteAnim.SetState(0);
         }
+        
     }
 
     public void FixedUpdate()

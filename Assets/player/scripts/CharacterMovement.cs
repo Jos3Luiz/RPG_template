@@ -50,6 +50,12 @@ public class CharacterMovement : MonoBehaviour
 
     public bool IsGrounded(){
         return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+        /*RaycastHit rayHit;
+        float characterHeight = GetComponent<BoxCollider> ().size.y;
+        float characterWidth = GetComponent<BoxCollider> ().size.x;
+        Vector3 startPoint = transform.position;
+        return Physics.SphereCast (startPoint, distToGround+1f, Vector3.down, out rayHit, distToGround+1f);  */
+
     }
     public void Jump(float input)
     {

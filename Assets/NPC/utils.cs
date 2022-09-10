@@ -11,20 +11,20 @@ public class Utils : MonoBehaviour
     float _maxDistance;
     LayerMask _layerMask;
 
-    public RaycastHit DebugSphereCast(Vector3 start,float sphereRadius,Vector3 direction,float maxDistance,LayerMask layerMask){
+    public bool DebugSphereCast(Vector3 start,float sphereRadius,Vector3 direction,out RaycastHit hit,float maxDistance,LayerMask layerMask){
         _start=start;
         _sphereRadius=sphereRadius;
 
         _direction=direction;
-        Debug.Log("casting");
-        RaycastHit hit;
-        if(Physics.SphereCast(start,sphereRadius , direction,out hit,maxDistance,layerMask)){
+        bool res=Physics.SphereCast(start,sphereRadius , direction,out hit,maxDistance,layerMask);
+        if(res){
             currentHitDistance=hit.distance;
+            Debug.Log("collider");
         }
         else{
             currentHitDistance = maxDistance;
         }
-        return hit;
+        return res;
     }
 
     private void OnDrawGizmos() {

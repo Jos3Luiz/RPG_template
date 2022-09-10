@@ -16,22 +16,22 @@ public class CharacterMovement : MonoBehaviour
     public float DragCoefficient = 4f;
     public float jumpForce = 20000;
     
+    
     private Vector2 CurrentSpeed;
     private Vector2 AccelerationDirection;
     private float rotSpeed;
-    private float distToGround;
-
+    private bool _canMove=true;
+    
     private Rigidbody rb;
     private SpriteAnimator spriteAnim;
     private Collider _collider;
 
     
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
         spriteAnim = GetComponent<SpriteAnimator>();
         _collider = GetComponent<Collider>();
-        distToGround = _collider.bounds.extents.y;
     }
 
     public void MoveHorizontal(float input)
@@ -49,17 +49,14 @@ public class CharacterMovement : MonoBehaviour
     }
 
     public bool IsGrounded(){
-        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
-        /*RaycastHit rayHit;
-        float characterHeight = GetComponent<BoxCollider> ().size.y;
-        float characterWidth = GetComponent<BoxCollider> ().size.x;
-        Vector3 startPoint = transform.position;
-        return Physics.SphereCast (startPoint, distToGround+1f, Vector3.down, out rayHit, distToGround+1f);  */
-
+        //removes collider of own character
+        Vector2 bounds = _collider.bounds.extents;
+        return (Physics.OverlapSphere(transform.position + Vector3.down*bounds.y,bounds.x/2).Length > 1);
     }
+
     public void Jump(float input)
     {
-        if (IsGrounded())
+        if (IsGrounded() && _canMove)
         {
             rb.AddForce(0, jumpForce, 0);
             spriteAnim.SetState(2);
@@ -82,18 +79,27 @@ public class CharacterMovement : MonoBehaviour
         if (CurrentSpeed.magnitude > 0.1)
         {
             spriteAnim.SetState(1);
-            
         }
         else
         {
             spriteAnim.SetState(0);
         }
-        
+
+        AccelerationDirection = Vector2.zero;
+
+    }
+
+    public void SetCanMove(bool canMove)
+    {
+        _canMove = canMove;
     }
 
     public void FixedUpdate()
     {
-        Vector3 speed = new Vector3(CurrentSpeed.x, 0, CurrentSpeed.y);
-        rb.MovePosition(rb.position + speed * Time.fixedDeltaTime);
+        if (_canMove)
+        {
+            Vector3 speed = new Vector3(CurrentSpeed.x, 0, CurrentSpeed.y);
+            rb.MovePosition(rb.position + speed * Time.fixedDeltaTime);            
+        }
     }
 }

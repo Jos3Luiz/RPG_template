@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 
     private CharacterMovement charMovement;
     private InputMaster controls;
+    private Vector2 input;
     void Awake()
     {
         charMovement = GetComponent<CharacterMovement>();
@@ -22,13 +23,12 @@ public class PlayerController : MonoBehaviour
 
     private void MovementAD(InputAction.CallbackContext ctx)
     {
-        charMovement.MoveHorizontal(ctx.ReadValue<float>());
+        input.x = ctx.ReadValue<float>();
     }
     
     private void MovementWS(InputAction.CallbackContext ctx)
     {
-        charMovement.MoveVertical(ctx.ReadValue<float>());
-
+        input.y = ctx.ReadValue<float>();
     }
 
     private void Jump(InputAction.CallbackContext ctx)
@@ -36,9 +36,14 @@ public class PlayerController : MonoBehaviour
         charMovement.Jump(0);
     }
 
+    public void Update()
+    {
+        charMovement.MoveHorizontal(input.x);
+        charMovement.MoveVertical(input.y);
+    }
+
     public void OnEnable()
     {
-        
         controls.Enable();
     }
 

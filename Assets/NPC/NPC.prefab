@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 8894177849660898148}
   - component: {fileID: 1427140959177369493}
   - component: {fileID: 3736717757846814594}
-  m_Layer: 0
+  - component: {fileID: 2658614201797760211}
+  m_Layer: 6
   m_Name: NPC
-  m_TagString: Player
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2132921713, guid: 44d8b62d25ce9fb4f8c95130b00eb08d, type: 3}
+  m_Sprite: {fileID: 340147546, guid: 1a7e402bf4f884444bd0157d86a052b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -103,21 +104,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationList:
   - SpriteArray:
-    - {fileID: 1711725022, guid: 44d8b62d25ce9fb4f8c95130b00eb08d, type: 3}
-    - {fileID: 767537829, guid: 44d8b62d25ce9fb4f8c95130b00eb08d, type: 3}
+    - {fileID: -1986102982, guid: 1a7e402bf4f884444bd0157d86a052b2, type: 3}
+    - {fileID: -1639186199, guid: 1a7e402bf4f884444bd0157d86a052b2, type: 3}
     fps: 3
     loop: 1
     dontInterrupt: 0
     nextAnim: 0
   - SpriteArray:
-    - {fileID: -553347328, guid: 44d8b62d25ce9fb4f8c95130b00eb08d, type: 3}
-    - {fileID: 935413111, guid: 44d8b62d25ce9fb4f8c95130b00eb08d, type: 3}
+    - {fileID: -1550584564, guid: 1a7e402bf4f884444bd0157d86a052b2, type: 3}
+    - {fileID: 500070469, guid: 1a7e402bf4f884444bd0157d86a052b2, type: 3}
     fps: 6
     loop: 1
     dontInterrupt: 0
     nextAnim: 1
   - SpriteArray:
-    - {fileID: -1331656262, guid: 44d8b62d25ce9fb4f8c95130b00eb08d, type: 3}
+    - {fileID: -1839612607, guid: 1a7e402bf4f884444bd0157d86a052b2, type: 3}
     fps: 0.5
     loop: 0
     dontInterrupt: 1
@@ -137,7 +138,7 @@ MonoBehaviour:
   accelerationMultiplier: 10
   MaxSpeed: 8
   DragCoefficient: 4
-  jumpForce: 30000
+  jumpForce: 20000
 --- !u!54 &8894177849660898148
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -146,7 +147,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2422230582899877666}
   serializedVersion: 2
-  m_Mass: 80
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -180,6 +181,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af82a54c085c664495761a9f8692240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  percepitonTickTime: 0.5
+  perceptionRadius: 2
+  perceptionAwareLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &2658614201797760211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2422230582899877666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b26683ababf8ab4a81b0ce7a17d927d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   isFriendly: 0
   randomWalkTime: 5
-  sphereRadius: 1
+  sphereRadius: 2

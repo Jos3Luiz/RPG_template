@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6177091001894413843}
   - component: {fileID: 8894177849660898148}
   - component: {fileID: 1427140959177369493}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ MonoBehaviour:
   accelerationMultiplier: 10
   MaxSpeed: 8
   DragCoefficient: 4
-  jumpForce: 30000
+  jumpForce: 20000
 --- !u!54 &8894177849660898148
 Rigidbody:
   m_ObjectHideFlags: 0

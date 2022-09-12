@@ -1,53 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterMovement))]
 [RequireComponent(typeof(NPC_Controller))]
-public class NPC_Behaviour : MonoBehaviour
+public class NPC_Behaviour : Base_Behaviour
 {
-    
-    
-    private Vector3 getRandomVector(){
-        float random = Random.Range(0f, 260f);
-        Vector2 v = new Vector2(Mathf.Cos(random), Mathf.Sin(random)).normalized;
-        return new Vector3 (v.x,0,v.y);
-    }
-    
-    public float randomWalkTime =5;
-    public float sphereRadius = 2;
-    private Vector3 startPoint;
+    public float randomWalkRadius=2f;
+    public float randomWalkTime=5f;
 
-    private NPC_Controller _npcController;
-    
-    // Start is called before the first frame update
-    void Start()
+    private Interactable _interactable;
+    private CharacterMovement _characterMovement;
+    public override void Start()
     {
-        startPoint = transform.position;
-        _npcController = GetComponent<NPC_Controller>();
-        _npcController.onPerceptionUpdate += OnPerceptionChange;
-        StartCoroutine(ApplyBehaviour());
-        
-    }
-
-    //can be used for implementing a state machine such as patroll patterns
-    protected virtual void ChoseNPCAction()
-    {
-        Vector3 targetPoint = startPoint + getRandomVector() * sphereRadius;
-        _npcController.AIMoveTo(targetPoint);
-    }
-    
-    IEnumerator ApplyBehaviour()
-    {
-        yield return null;
-        while (true)
+        base.Start();
+        _characterMovement = GetComponent<CharacterMovement>();
+        _interactable = GetComponent<Interactable>();
+        if (_interactable)
         {
-            ChoseNPCAction();
-            yield return new WaitForSeconds(randomWalkTime);
+            _interactable.onPrompt += OnPrompt;
         }
+
+    }
+    protected override float BehaviourTick()
+    {
+        npcController.AIRandomWalk(randomWalkRadius);
+        return randomWalkTime;
     }
 
-    protected virtual void OnPerceptionChange(GameObject[] arr)
+    protected void OnPrompt(bool s)
     {
-        _npcController.Jump();
+        _characterMovement.SetCanMove(!s);
     }
+    
 }

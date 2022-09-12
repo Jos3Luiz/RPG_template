@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private CharacterMovement charMovement;
     private InputMaster controls;
     private Vector2 input;
+    private Interactable interactableTarget;
     void Awake()
     {
         charMovement = GetComponent<CharacterMovement>();
@@ -19,21 +20,30 @@ public class PlayerController : MonoBehaviour
         controls.Player.MovementAD.performed += ctx  => MovementAD(ctx);
         controls.Player.MovementWS.performed += ctx  => MovementWS(ctx);
         controls.Player.Jump.performed += ctx  => Jump(ctx);
+        controls.Player.Interact.performed += ctx  => Interact(ctx);
     }
 
-    private void MovementAD(InputAction.CallbackContext ctx)
+    protected void MovementAD(InputAction.CallbackContext ctx)
     {
         input.x = ctx.ReadValue<float>();
     }
     
-    private void MovementWS(InputAction.CallbackContext ctx)
+    protected void MovementWS(InputAction.CallbackContext ctx)
     {
         input.y = ctx.ReadValue<float>();
     }
 
-    private void Jump(InputAction.CallbackContext ctx)
+    protected void Jump(InputAction.CallbackContext ctx)
     {
         charMovement.Jump(0);
+    }
+
+    protected void Interact(InputAction.CallbackContext ctx)
+    {
+        if (interactableTarget)
+        {
+            interactableTarget.Interact(gameObject);
+        }
     }
 
     public void Update()
@@ -52,5 +62,42 @@ public class PlayerController : MonoBehaviour
         controls.Disable();
     }
 
-    
+    public void OnCollisionEnter(Collision collision)
+    {
+        Interactable comp = collision.gameObject.GetComponent<Interactable>();
+        if (!comp)
+            return;
+        
+        //interactableTarget is null, then interactableTarget=new comp
+        if (!interactableTarget)
+        {
+            interactableTarget = comp;
+            comp.changePrompt(true);
+        }
+        //check if new interactable is closer
+        else
+        {
+            if ((transform.position - comp.transform.position).magnitude
+                < (transform.position - interactableTarget.transform.position).magnitude)
+            {
+                interactableTarget.changePrompt(false);
+                interactableTarget = comp;
+                comp.changePrompt(true);
+            }
+        }
+        
+        
+    }
+
+    public void OnCollisionExit(Collision collision)
+    {
+        Interactable comp = collision.gameObject.GetComponent<Interactable>();
+        if (!comp)
+            return;
+        if (comp == interactableTarget)
+        {
+            comp.changePrompt(false);
+            interactableTarget = null;
+        }
+    }
 }

@@ -16,7 +16,8 @@ GameObject:
   - component: {fileID: 1427140959177369493}
   - component: {fileID: 3736717757846814594}
   - component: {fileID: 2658614201797760211}
-  m_Layer: 6
+  - component: {fileID: 6841924323862506910}
+  m_Layer: 7
   m_Name: NPC
   m_TagString: NPC
   m_Icon: {fileID: 0}
@@ -181,11 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af82a54c085c664495761a9f8692240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  percepitonTickTime: 0.5
-  perceptionRadius: 2
-  perceptionAwareLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &2658614201797760211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +194,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b26683ababf8ab4a81b0ce7a17d927d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFriendly: 0
   randomWalkTime: 5
   sphereRadius: 2
+--- !u!114 &6841924323862506910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2422230582899877666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aa769a6e6800f4e9ccc768a4bc1f6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filter:
+    serializedVersion: 2
+    m_Bits: 64
+  popUpPrefab: {fileID: 3352212156139270734, guid: bca64ed24dad23440b476ab3f440dbef,
+    type: 3}
+  offset: {x: 0, y: 0.5, z: 0}

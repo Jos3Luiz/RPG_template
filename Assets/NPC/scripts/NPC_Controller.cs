@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 
 
@@ -9,62 +8,38 @@ using System.Linq;
 public class NPC_Controller : MonoBehaviour
 {
 
-    public delegate void FOnPerceptionUpdated(GameObject[] arr);
-
-    public FOnPerceptionUpdated onPerceptionUpdate;
     
-    
-    public float percepitonTickTime=0.5f;
-    public float perceptionRadius=2f;
-    public LayerMask perceptionAwareLayer;
     
     private Vector3 targetPoint;
     private GameObject targetObject;
     private bool isTracking=false;
     private bool finishedTracking=false;
+    private Vector3 startPoint;
     
     private CharacterMovement charMov;
     void Start()
     {
         charMov = GetComponent<CharacterMovement>();
-        
-        StartCoroutine(PerceptionTick());
+        targetPoint = transform.position;
+        startPoint = transform.position;
     }
-    
-    IEnumerator PerceptionTick()
-    {
-        yield return null;
-        while(true)
-        {
-            GameObject[] results = Physics.OverlapSphere(transform.position, perceptionRadius, perceptionAwareLayer)
-                .Select(x => x.gameObject)
-                .Where(x => x != gameObject)
-                .ToArray();
-            if (results.Length > 0)
-            {
-                onPerceptionUpdate(results);
-            }
-            
-            yield return new WaitForSeconds(percepitonTickTime);
-        }
-    }
-    
-    
-    
+
+
     private void MoveToVector(Vector3 desiredPosition){
         Vector3 direction = (desiredPosition-transform.position);
         direction.y = 0;
         Vector2 input = new Vector2(direction.x,direction.z).normalized;
-        if (direction.magnitude > 0.1f)
+        
+        //if too too close
+        if (direction.magnitude < 0.1f)
+        {
+            finishedTracking = true;
+        }
+        else
         {
             charMov.MoveHorizontal(input.x);
             charMov.MoveVertical(input.y);
         }
-        else
-        {
-            finishedTracking = true;
-        }
-
     }
 
     // Update is called once per frame
@@ -94,15 +69,27 @@ public class NPC_Controller : MonoBehaviour
         finishedTracking = false;
     }
 
-    public void Jump()
+    public void AIStop()
     {
-        charMov.Jump(0);
+        finishedTracking = true;
+    }
+    
+    private static Vector3 GetRandomVector(){
+        float random = Random.Range(0f, 260f);
+        Vector2 v = new Vector2(Mathf.Cos(random), Mathf.Sin(random)).normalized;
+        return new Vector3 (v.x,0,v.y);
+    }
+    
+    public void AIRandomWalk(float sphereRadius,bool resetPosition=false)
+    {
+        if (resetPosition)
+        {
+            startPoint = transform.position;
+        }
+        AIMoveTo(startPoint + GetRandomVector() * sphereRadius);
     }
     
     private void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position,perceptionRadius);
-        
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position,targetPoint );
         

@@ -66,6 +66,12 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_canMove)
+        {
+            spriteAnim.SetState(0);
+            return;
+        }
+            
         CurrentSpeed = Vector2.ClampMagnitude(CurrentSpeed - (CurrentSpeed * (DragCoefficient * Time.fixedDeltaTime)) +
                                               AccelerationDirection.normalized *
                                               (accelerationMultiplier * Time.fixedDeltaTime), MaxSpeed);
